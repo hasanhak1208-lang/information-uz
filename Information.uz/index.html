@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Information.uz - Qiziqarli Faktlar</title>
+  <style>
+    :root {
+      --bg: #f3f7ff;
+      --text: #222;
+      --card: #fff;
+      --primary: #0066ff;
+      --accent: #00c3ff;
+      --shadow: rgba(0,0,0,0.1);
+    }
+    body.dark {
+      --bg: #0d1117;
+      --text: #e5e7eb;
+      --card: #1e293b;
+      --primary: #3b82f6;
+      --accent: #60a5fa;
+      --shadow: rgba(0,0,0,0.6);
+    }
+    body {
+      margin:0; padding:0;
+      font-family:'Poppins',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      transition:all 0.3s;
+    }
+    header {
+      background:linear-gradient(135deg,var(--primary),var(--accent));
+      color:#fff;
+      padding:15px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky; top:0; z-index:100;
+      box-shadow:0 4px 10px var(--shadow);
+    }
+    .logo {
+      display:flex; align-items:center; gap:10px;
+    }
+    .logo img {
+      width:40px; height:40px; border-radius:50%; background:#fff; padding:4px;
+    }
+    .logo h1 {
+      font-size:1.4rem; margin:0;
+    }
+    nav a {
+      color:#fff; text-decoration:none; margin:0 10px; font-weight:500; transition:0.3s;
+    }
+    nav a:hover {opacity:0.8;}
+    .dark-toggle {
+      background:#fff; border:none; border-radius:20px;
+      padding:8px 14px; cursor:pointer; color:var(--primary); font-weight:bold;
+    }
+    body.dark .dark-toggle {background:#374151;color:#fff;}
+    .container {max-width:1100px;margin:40px auto;padding:0 20px;}
+    .search-box{text-align:center;margin-bottom:25px;}
+    .search-box input {
+      width:80%; max-width:500px; padding:10px 15px;
+      border:2px solid var(--primary);
+      border-radius:30px;
+      font-size:1rem; outline:none;
+    }
+    .categories{text-align:center;margin:20px 0 30px;}
+    .categories button {
+      background:var(--primary); color:#fff; border:none;
+      border-radius:30px; padding:10px 18px; margin:5px; cursor:pointer; transition:0.3s; font-weight:500;
+    }
+    .categories button:hover {background:var(--accent); transform:scale(1.05);}
+    .fact-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:25px;}
+    .fact-card {
+      background:var(--card); border-radius:16px; overflow:hidden;
+      box-shadow:0 4px 15px var(--shadow); transition:all 0.3s; display:flex; flex-direction:column;
+    }
+    .fact-card:hover {transform:translateY(-8px); box-shadow:0 6px 20px var(--shadow);}
+    .fact-card img {width:100%; height:180px; object-fit:cover;}
+    .fact-card-content {padding:15px;}
+    .fact-card h3 {color:var(--primary); margin-top:0;}
+    .comments {margin:15px; background:rgba(255,255,255,0.7); border-radius:12px; padding:10px 15px; box-shadow:0 2px 6px var(--shadow);}
+    body.dark .comments {background:rgba(30,41,59,0.9);}
+    .comments h4 {margin-bottom:10px; color:var(--primary);}
+    .comment-list p {background:var(--card); padding:8px 12px; border-radius:8px; margin:5px 0; font-size:0.9rem; box-shadow:0 1px 4px var(--shadow);}
+    .comment-name, .comment-text {
+      width:100%; border:1px solid var(--primary); border-radius:8px; margin-bottom:8px; padding:8px; font-size:0.9rem;
+    }
+    .comment-text {resize:none; height:60px;}
+    .comment-btn {background:var(--primary); color:#fff; border:none; border-radius:8px; padding:8px 12px; cursor:pointer;}
+    .comment-btn:hover {background:var(--accent);}
+    footer {background:var(--primary); color:#fff; text-align:center; padding:20px; margin-top:50px;}
+    #about {
+      display:none;
+      background:var(--card);
+      border-radius:16px;
+      padding:25px;
+      box-shadow:0 4px 15px var(--shadow);
+      margin:30px auto;
+      max-width:800px;
+      line-height:1.7;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="./logo.png" alt="logo">
+    <h1>Information.uz</h1>
+  </div>
+  <nav>
+    <a href="#" onclick="showHome()">Asosiy</a>
+    <a href="#" onclick="showAbout()">Biz haqimizda</a>
+  </nav>
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+</header>
+
+<div class="container" id="main-content">
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="🔍 Faktni izlang..." onkeyup="searchFacts()">
+  </div>
+
+  <div class="categories">
+    <button onclick="filterCategory('all')">Barchasi</button>
+    <button onclick="filterCategory('Inson')">Inson</button>
+    <button onclick="filterCategory('Hayvonlar')">Hayvonlar</button>
+    <button onclick="filterCategory('Texnologiya')">Texnologiya</button>
+    <button onclick="filterCategory('Tarix')">Tarix</button>
+    <button onclick="filterCategory('Koinot')">Koinot</button>
+  </div>
+
+  <div id="facts" class="fact-grid">
+
+    <div class="fact-card" data-category="Inson">
+      <img src="https://images.pexels.com/photos/3779428/pexels-photo-3779428.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Inson miyasi">
+      <div class="fact-card-content"><h3>Inson miyasi</h3><p>Inson miyasi 86 milliard neyronlardan iborat va aql markazidir.</p></div>
+      <div class="comments"><h4>Izohlar</h4><div class="comment-list"></div>
+        <input type="text" placeholder="Ismingiz" class="comment-name">
+        <textarea placeholder="Fikringizni yozing..." class="comment-text"></textarea>
+        <button class="comment-btn" onclick="addComment(this)">Yuborish</button></div>
+    </div>
+
+    <div class="fact-card" data-category="Hayvonlar">
+      <img src="./images.jpg" alt="Delfinlar">
+      <div class="fact-card-content"><h3>Delfinlar</h3><p>Delfinlar bir-birlarini ismlari bilan chaqirishadi.</p></div>
+      <div class="comments"><h4>Izohlar</h4><div class="comment-list"></div>
+        <input type="text" placeholder="Ismingiz" class="comment-name">
+        <textarea placeholder="Fikringizni yozing..." class="comment-text"></textarea>
+        <button class="comment-btn" onclick="addComment(this)">Yuborish</button></div>
+    </div>
+
+    <div class="fact-card" data-category="Texnologiya">
+      <img src="https://images.pexels.com/photos/1181329/pexels-photo-1181329.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Texnologiya">
+      <div class="fact-card-content"><h3>Sun’iy intellekt</h3><p>AI inson kabi o‘rganish va qaror qabul qilish qobiliyatiga ega tizimlardir.</p></div>
+      <div class="comments"><h4>Izohlar</h4><div class="comment-list"></div>
+        <input type="text" placeholder="Ismingiz" class="comment-name">
+        <textarea placeholder="Fikringizni yozing..." class="comment-text"></textarea>
+        <button class="comment-btn" onclick="addComment(this)">Yuborish</button></div>
+    </div>
+
+    <div class="fact-card" data-category="Tarix">
+      <img src="./Без названия.jpg" alt="Piramidalar">
+      <div class="fact-card-content"><h3>Piramidalar</h3><p>Misr piramidalari 4500 yildan ortiq tarixga ega.</p></div>
+      <div class="comments"><h4>Izohlar</h4><div class="comment-list"></div>
+        <input type="text" placeholder="Ismingiz" class="comment-name">
+        <textarea placeholder="Fikringizni yozing..." class="comment-text"></textarea>
+        <button class="comment-btn" onclick="addComment(this)">Yuborish</button></div>
+    </div>
+
+    <div class="fact-card" data-category="Koinot">
+      <img src="./7aa5d7ce48ed073145a01c10554edc45.jpg" alt="Koinot">
+      <div class="fact-card-content"><h3>Koinot</h3><p>Koinotning yoshi 13,8 milliard yil deb hisoblanadi va u kengayishda davom etmoqda.</p></div>
+      <div class="comments"><h4>Izohlar</h4><div class="comment-list"></div>
+        <input type="text" placeholder="Ismingiz" class="comment-name">
+        <textarea placeholder="Fikringizni yozing..." class="comment-text"></textarea>
+        <button class="comment-btn" onclick="addComment(this)">Yuborish</button></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Biz haqimizda sahifasi -->
+<div id="about">
+  <h2>Biz haqimizda</h2>
+  <p><strong>Information.uz</strong> — bu sizga dunyo haqidagi eng qiziqarli, foydali va hayratlanarli faktlarni taqdim etuvchi platforma. 
+  Bizning maqsadimiz — bilim olishni yanada oson, tushunarli va zavqli qilishdir. 
+  Har kuni yangilanadigan faktlar orqali siz tarix, texnologiya, inson tanasi, tabiat va koinot haqidagi yangiliklardan boxabar bo‘lasiz.</p>
+  <p>📧 Biz bilan bog‘lanish: <a href="mailto:info@information.uz">info@information.uz</a></p>
+</div>
+
+<footer>
+  <p>&copy; 2025 Information.uz | <a href="#" style="color:white;" onclick="showAbout()">Biz haqimizda</a></p>
+</footer>
+
+<script>
+function showAbout() {
+  document.getElementById('main-content').style.display = 'none';
+  document.getElementById('about').style.display = 'block';
+}
+function showHome() {
+  document.getElementById('about').style.display = 'none';
+  document.getElementById('main-content').style.display = 'block';
+}
+function filterCategory(cat){
+  document.querySelectorAll('.fact-card').forEach(card=>{
+    card.style.display=(cat==='all'||card.dataset.category===cat)?'flex':'none';
+  });
+}
+function searchFacts(){
+  const q=document.getElementById("searchInput").value.toLowerCase();
+  document.querySelectorAll('.fact-card').forEach(card=>{
+    card.style.display=card.innerText.toLowerCase().includes(q)?'flex':'none';
+  });
+}
+function toggleDarkMode(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('darkMode',document.body.classList.contains('dark'));
+}
+function addComment(btn){
+  const container=btn.closest('.comments');
+  const nameInput=container.querySelector('.comment-name');
+  const textInput=container.querySelector('.comment-text');
+  const list=container.querySelector('.comment-list');
+  const name=nameInput.value.trim();
+  const text=textInput.value.trim();
+  if(name && text){
+    const p=document.createElement('p');
+    p.innerHTML=`<strong>${name}:</strong> ${text}`;
+    list.appendChild(p);
+    nameInput.value=''; textInput.value='';
+  }else{alert("Iltimos, ism va fikrni to‘ldiring!");}
+}
+window.onload=()=>{
+  if(localStorage.getItem('darkMode')==='true'){document.body.classList.add('dark');}
+};
+</script>
+</body>
+</html>
